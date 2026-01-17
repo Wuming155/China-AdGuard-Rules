@@ -1,4 +1,4 @@
-! Title: 搜索引擎进化
+! Title: 搜索引擎净化
 ! --- 1. 必应 (Bing) 基础净化 ---
 bing.com##div.b_wpt_container.lgwjsfix
 bing.com##li.b_ans
