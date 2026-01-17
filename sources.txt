@@ -1,0 +1,2 @@
+https://raw.githubusercontent.com/2Gardon/SM-Ad-FuckU-hosts/refs/heads/master/SMAdHosts
+http://rssv.cn/adguard/config/black.txt
