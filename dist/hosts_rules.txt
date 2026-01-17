@@ -1,5 +1,5 @@
 #更新日期：2026年01月17日
-#规则数：4928
+#规则数：4926
 ! Title: Hosts 屏蔽规则
 ! ------------------------------------
 
@@ -781,7 +781,6 @@
 0.0.0.0 api-share.mob.com
 0.0.0.0 api-shoulei-ssl.xunlei.com
 0.0.0.0 api-trace.kajicam.com
-0.0.0.0 api-user.dalyfeds.com
 0.0.0.0 api-v3.mentamob.com
 0.0.0.0 api-verify.dutils.com
 0.0.0.0 api-verify.hiaiabc.com
@@ -2711,7 +2710,6 @@
 0.0.0.0 mc.atm.youku.com
 0.0.0.0 mcd-mkt-prod31-lb.campaign.adobe.com
 0.0.0.0 mcdn.kandian.qq.com
-0.0.0.0 mcds.dalyfeds.com
 0.0.0.0 mcg-ads.inmobi.com
 0.0.0.0 mcs.snssdk.com
 0.0.0.0 mcs.zijieapi.com

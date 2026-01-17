@@ -1,5 +1,5 @@
 #更新日期：2026年01月17日
-#规则数：900
+#规则数：902
 ! Title: AdGuard 过滤规则
 ! ------------------------------------
 
@@ -8,6 +8,8 @@
 *-ad.wtzw.com*
 *-be-pack-sign.pglstatp-toutiao.com*
 *-normal.zijieapi.com*
+0.0.0.0 api-user.dalyfeds.com  #屏蔽底栏[发现]页的短视频和[游戏]裡满屏的小游戏
+0.0.0.0 mcds.dalyfeds.com  #开屏广告、[我的]页面广告、主页右下角伸缩贴图广告
 ||1500020991.vodplayer.wxamedia.com^
 ||1500022744.vodplayer.wxamedia.com^
 ||1500026601.vodplayer.wxamedia.com^
