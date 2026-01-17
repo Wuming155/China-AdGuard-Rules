@@ -1,11 +1,19 @@
-# 更新日期：2026年01月17日
-# 规则数：6090
+#更新日期：2026年01月17日
+#规则数：6100
 ! Title: Hosts 屏蔽规则
 
-0.0.0.0 *-inapps.appsflyersdk.com
-0.0.0.0 *-launches.appsflyersdk.com
-0.0.0.0 *.bjmantis.net
-0.0.0.0 *.nrb.footprintdns.com
+0.0.0.0 -didomi.js
+0.0.0.0 -geoIP.js
+0.0.0.0 -scroll-tracker.js
+0.0.0.0 .beacon.min.js
+0.0.0.0 .eloqua.js
+0.0.0.0 .gatracking.js
+0.0.0.0 .outbound-links.pageview-props.revenue.tagged-events.js
+0.0.0.0 .pageview-props.js
+0.0.0.0 .prod.pr.analytics.console.aws.a2z.com
+0.0.0.0 .skimlinks.js
+0.0.0.0 .stape.net
+0.0.0.0 .z.dkt-ib.com
 0.0.0.0 0.r.msn.com
 0.0.0.0 01.adnxs.com
 0.0.0.0 1.oadz.com
@@ -1437,7 +1445,7 @@
 0.0.0.0 beacon.sina.com.cn
 0.0.0.0 beacon.tingyun.com
 0.0.0.0 beaconcdn.qq.com
-0.0.0.0 beacons*.gvt3.com
+0.0.0.0 beacons
 0.0.0.0 beacons.gvt2.com
 0.0.0.0 beaconserver-ce-vpc0-1537565064.eu-west-1.elb.amazonaws.com
 0.0.0.0 beaconserver-ce-vpc0-1909323404.us-west-2.elb.amazonaws.com
@@ -2162,9 +2170,11 @@
 0.0.0.0 dns.m.sm.cn
 0.0.0.0 dns.qiyipic.iqiyi.com
 0.0.0.0 dns.qq.com
+0.0.0.0 dns.wechat.com
 0.0.0.0 dns.weibo.cn
 0.0.0.0 dns.weixin.qq.com
 0.0.0.0 dns.weixin.qq.com.cn
+0.0.0.0 dns2.titannetwork.cn
 0.0.0.0 dnstest.weixin.qq.com
 0.0.0.0 doc.admobile.top
 0.0.0.0 doc.cnzz.com
@@ -2419,7 +2429,7 @@
 0.0.0.0 fodder.qq.com
 0.0.0.0 fodder.tc.qq.com
 0.0.0.0 fonts.googleapis.com
-0.0.0.0 fp-it*.fengkongcloud.com
+0.0.0.0 fp-it
 0.0.0.0 fp-it.fengkongcloud.com
 0.0.0.0 fp-it.portal101.cn
 0.0.0.0 fp.tongdun.net
@@ -3236,11 +3246,9 @@
 0.0.0.0 llmchat.voiceads.cn
 0.0.0.0 lm10111.jtrincc.cn
 0.0.0.0 lmbsy.qq.com
-0.0.0.0 localhost
 0.0.0.0 location.ximalaya.com
 0.0.0.0 lofter.httpdns.c.163.com
-0.0.0.0 log*-misc-lf.amemv.com
-0.0.0.0 log*.aliyuncs.com
+0.0.0.0 log
 0.0.0.0 log-api-mn.huxiu.com
 0.0.0.0 log-api.huxiu.com
 0.0.0.0 log-api.oceanengine.com
@@ -3309,6 +3317,7 @@
 0.0.0.0 logbak.hicloud.com
 0.0.0.0 logger.qingting.fm
 0.0.0.0 loggw.alipay.com.cn
+0.0.0.0 loggw.alipaydns.com
 0.0.0.0 logonext.tv.kuyun.com
 0.0.0.0 logrcv.aiclk.com
 0.0.0.0 logs-cn.ads.vungle.com
@@ -4346,7 +4355,7 @@
 0.0.0.0 register.appsflyer.com
 0.0.0.0 render-server.cdn.bcebos.com
 0.0.0.0 report-stats.ad.jiguang.cn
-0.0.0.0 report.*.qq.com
+0.0.0.0 report.
 0.0.0.0 report.adview.cn
 0.0.0.0 report.baihemob.com
 0.0.0.0 report.banyunjuhe.com
@@ -5118,6 +5127,7 @@
 0.0.0.0 t.pg.cn.miaozhen.com
 0.0.0.0 t.sj.qq.com
 0.0.0.0 t.track.ad.xiaomi.com
+0.0.0.0 t.yesware.com
 0.0.0.0 t03-api.xlmc.xunlei.com
 0.0.0.0 t5.taboola.com
 0.0.0.0 t7z.cupid.iqiyi.com
