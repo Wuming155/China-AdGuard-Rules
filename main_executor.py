@@ -33,7 +33,7 @@ def update_readme(file_stats):
     with open(readme_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 1. 构造新的表格块
+    # 1. 构造新表格
     table_rows = ""
     for filename in sorted(file_stats.keys()):
         count = file_stats[filename]
@@ -41,18 +41,14 @@ def update_readme(file_stats):
         table_rows += f"| **{display_name}** | {count} | [点击下载](./dist/{filename}) |\n"
 
     date_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
     start_marker = ""
     end_marker = ""
 
-    # 2. 核心逻辑：直接物理分割字符串
+    # 2. 物理分割逻辑，彻底杜绝重复追加
     if start_marker in content and end_marker in content:
-        # 保留标记之前的部分
         before = content.split(start_marker)[0]
-        # 保留标记之后的部分
         after = content.split(end_marker)[-1]
         
-        # 重新拼接：前段 + 开始标记 + 新表格 + 结束标记 + 后段
         new_stats = (
             f"\n### 📊 规则统计\n"
             f"| 规则类型 | 规则数量 | 下载链接 |\n"
@@ -60,19 +56,21 @@ def update_readme(file_stats):
             f"{table_rows}\n"
             f"**⏰ 最后更新时间**: {date_str}\n"
         )
-        
+        # 重新组装，确保标记位被完整保留
         updated_content = before + start_marker + new_stats + end_marker + after
         
         with open(readme_path, 'w', encoding='utf-8') as f:
             f.write(updated_content.strip() + "\n")
-        print("README 统计已精准替换。")
+        print("README 统计已更新。")
     else:
-        # 如果找不到标记，为了防止乱加，直接报错不处理
-        print("！！！错误：README 中找不到标记位，停止更新以防重复！！！")
+        # 如果找不到标记位，直接报错退出，GitHub Action 会显示红色，但不会搞乱文件
+        print(f"Error: 找不到标记位 {start_marker} 或 {end_marker}")
+        import sys
+        sys.exit(1)
+
 def run():
     collections = {'hosts_rules.txt': set(), 'adguard_rules.txt': set(), 'whitelist.txt': set()}
     if not os.path.exists('sources.txt'): return
-        
     with open('sources.txt', 'r', encoding='utf-8') as f:
         urls = re.findall(r'https?://[^\s\]]+', f.read())
 
@@ -100,7 +98,6 @@ def run():
             with open(f'dist/{filename}', 'w', encoding='utf-8') as f:
                 f.write(get_file_header(filename, len(rules)))
                 f.write("\n".join(sorted(list(rules))))
-
     update_readme(file_stats)
 
 if __name__ == "__main__":
