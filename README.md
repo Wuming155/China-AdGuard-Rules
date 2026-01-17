@@ -10,9 +10,9 @@
 | custom_whitelist.txt | 1 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/custom-rules/custom_whitelist.txt) |
 | whitelist.txt | 7611 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/whitelist.txt) |
 | adguard_rules.txt | 161981 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/adguard_rules.txt) |
-| hosts_rules.txt | 6088 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/hosts_rules.txt) |
+| hosts_rules.txt | 6073 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/hosts_rules.txt) |
 
-⏰ 最后更新: 2026-01-17 22:56:57
+⏰ 最后更新: 2026-01-17 23:28:56
 
 ## 二、注意事项
 1.custom_whitelist.txt包含在whitelist.txt中，用于自定义放行的域名。
