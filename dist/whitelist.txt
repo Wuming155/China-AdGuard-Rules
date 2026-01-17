@@ -1,5 +1,5 @@
 # 更新日期：2026年01月17日
-# 规则数：7609
+# 规则数：7610
 ! Title: 白名单放行规则
 
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
@@ -1039,6 +1039,7 @@
 @@||assets.msn.com^
 @@||assets.oneweb.mercedes-benz.com^
 @@||assets.sb-cd.com^
+@@||assets.yasno.live/packs/assets/analytics-events-$script,~third-party
 @@||assets.youlai.cn^
 @@||astatic.ccmbg.com/fc/js/prebid?v=$domain=journaldunet.com
 @@||astyle.alicdn.com/??
