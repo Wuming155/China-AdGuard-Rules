@@ -31,7 +31,7 @@
 ### 3. AWAvenue Ads Rule
 
 * **地址**: `https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt`
-* **介绍**: 著名的秋分规则，短小精悍，误杀小。
+* **介绍**: 著名的秋风规则，短小精悍，误杀小。
 
 ### 4. DD-AD
 
