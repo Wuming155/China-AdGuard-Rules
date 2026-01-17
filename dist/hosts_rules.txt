@@ -1,7 +1,6 @@
 # 更新日期：2026年01月17日
 # 规则数：6090
 ! Title: Hosts 屏蔽规则
-! ------------------------------------
 
 0.0.0.0 *-inapps.appsflyersdk.com
 0.0.0.0 *-launches.appsflyersdk.com
