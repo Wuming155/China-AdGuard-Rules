@@ -5,61 +5,53 @@ from datetime import datetime
 
 def get_file_header(name, count):
     date_str = datetime.now().strftime('%y%m%d')
+    # 重新定义三类标题
     title_map = {
         'hosts_rules': 'Hosts 屏蔽规则',
-        'adblock_rules': 'Adblock 静态规则',
-        'adguard_rules': 'AdGuard 高级规则',
-        'whitelist': '白名单规则'
+        'adguard_rules': 'AdGuard 过滤规则',
+        'whitelist': '白名单放行规则'
     }
     display_title = title_map.get(name, '去广告规则')
-    return f"#更新日期：{date_str}\n#规则数：{count}\n! Title: {display_title}\n! ------------------------------------\n\n"
+    return f"#更新日期：{date_str}\n#规则数：{count}\n! Title: {display_title}\n\n"
 
 def run():
-    # 严格分类容器
+    # 严格分为三类
     collections = {
-        'hosts_rules': set(),
-        'adblock_rules': set(),
-        'adguard_rules': set(),
-        'whitelist': set()
+        'hosts_rules': set(),    # 纯域名类 (0.0.0.0)
+        'whitelist': set(),      # 白名单类 (@@)
+        'adguard_rules': set()   # 语法类 (||, ##, $, 等)
     }
 
     if not os.path.exists('sources.txt'):
-        print("Error: sources.txt not found")
+        print("错误: 找不到 sources.txt")
         return
         
     with open('sources.txt', 'r') as f:
         urls = [line.strip() for line in f if line.strip().startswith('http')]
 
     for url in urls:
-        print(f"正在处理源: {url}")
+        print(f"正在处理: {url}")
         try:
             r = requests.get(url, timeout=15)
             for line in r.text.splitlines():
                 line = line.strip()
                 
-                # 排除空行和纯注释
+                # 过滤掉空行和纯注释
                 if not line or line.startswith('!') or (line.startswith('#') and not line.startswith('##')):
                     continue
 
-                # --- 1. 绝对优先：白名单 ---
+                # 1. 分类逻辑：白名单
                 if line.startswith('@@'):
                     collections['whitelist'].add(line)
                     continue
 
-                # --- 2. 绝对隔离：AdGuard 高级规则 ---
-                # 只要含有这些特殊符号，就判定为高级规则，不进入 Adblock
-                if '##' in line or '#%#' in line or '#$#' in line or '$' in line:
+                # 2. 分类逻辑：AdGuard/语法类 (包含你举例的 || 开头的规则)
+                # 只要是 || 开头，或者含有 ##, #%#, $ 符号的，全进这一类
+                if line.startswith('||') or '##' in line or '#%#' in line or '$' in line:
                     collections['adguard_rules'].add(line)
                     continue
 
-                # --- 3. 绝对隔离：标准 Adblock 规则 ---
-                # 此时已排除了带 $ 的高级规则，只保留纯粹的 ||domain^
-                if line.startswith('||'):
-                    collections['adblock_rules'].add(line)
-                    continue
-
-                # --- 4. 绝对隔离：Hosts 规则 ---
-                # 匹配 127/0.0.0.0 格式，统一转为 0.0.0.0
+                # 3. 分类逻辑：Hosts 域名类
                 host_match = re.match(r'^(?:127\.0\.0\.1|0\.0\.0\.0)\s+([a-zA-Z0-9\-\.\_]+)', line)
                 if host_match:
                     domain = host_match.group(1)
@@ -67,17 +59,17 @@ def run():
                         collections['hosts_rules'].add(f"0.0.0.0 {domain}")
                     continue
                 
-                # 5. 如果是纯域名行，也归入 Hosts
+                # 如果是纯域名行，也归入 Hosts
                 if re.match(r'^[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}$', line):
                     collections['hosts_rules'].add(f"0.0.0.0 {line}")
 
         except Exception as e:
-            print(f"无法读取 {url}: {e}")
+            print(f"请求失败: {url} -> {e}")
 
     # 导出文件
     os.makedirs('dist', exist_ok=True)
     for name, rules in collections.items():
-        if rules:
+        if rules: # 只有当该类别有规则时才生成文件
             sorted_rules = sorted(list(rules))
             with open(f'dist/{name}.txt', 'w', encoding='utf-8') as f:
                 f.write(get_file_header(name, len(sorted_rules)))
