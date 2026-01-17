@@ -1,38 +1,35 @@
-name: Rules Auto Sync
+name: Update Rules and README
 
 on:
   schedule:
-    - cron: '0 22 * * *'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    - cron: '0 0 * * *' # 每天北京时间上午8点自动运行一次
+  workflow_dispatch:      # 允许手动触发执行
+  push:
+    paths:
+      - 'sources.txt'     # 当你修改源列表时自动运行
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
-      - name: Install dependencies
+
+      - name: Install Dependencies
         run: pip install requests
 
-      - name: Run logic
-        run: python main_executor.py
+      - name: Run Update Script
+        run: python update_rules.py # 确保你的脚本文件名叫这个
 
-      - name: Deploy
+      - name: Commit and Push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add dist/*.txt README.md
-          if git diff --cached --quiet; then
-            echo "No changes."
-          else
-            git commit -m "Auto Update: $(date +'%Y-%m-%d')"
-            git push origin HEAD:main
-          fi
+          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
+          git push
