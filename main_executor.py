@@ -63,12 +63,12 @@ def update_readme(stats):
 
 ⏰ 最后更新: {now}
 """
-    # 使用正则表达式寻找 和 # 并将它们之间的所有旧内容（无论几百行）全部替换为新表格
-    pattern = r".*?"
-    replacement = f"\n{table_content}\n"
+    # 使用正则表达式匹配 "## 规则统计" 标题及其内容，直到下一个标题
+    pattern = r"(## 规则统计[\s\S]*?)(?=## |$)"
+    replacement = f"## 规则统计\n{table_content}\n"
     
-    # re.DOTALL 确保点号可以匹配换行符
-    new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+    # 替换规则统计部分
+    new_content = re.sub(pattern, replacement, content)
 
     with open('README.md', 'w', encoding='utf-8') as f:
         f.write(new_content)
