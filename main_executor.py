@@ -38,17 +38,17 @@ def fetch_url(url):
     return []
 
 def update_readme(file_stats):
-    """根据实际生成的文件和数量，动态更新 README.md"""
-    if not os.path.exists(README_FILE):
-        print("未找到 README.md，跳过更新")
+    """彻底修复重复追加问题的更新函数"""
+    readme_path = 'README.md'
+    if not os.path.exists(readme_path): 
+        print("错误：找不到 README.md")
         return
 
-    with open(README_FILE, 'r', encoding='utf-8') as f:
+    with open(readme_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 构建动态表格行
+    # 1. 构造新的表格内容
     table_rows = ""
-    # 按照 TITLE_MAP 的顺序排序，保证表格整齐
     for filename in sorted(file_stats.keys()):
         count = file_stats[filename]
         display_name = TITLE_MAP.get(filename, filename.replace('.txt', ''))
@@ -56,23 +56,26 @@ def update_readme(file_stats):
 
     date_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    # 构建要替换进去的完整块
-    new_stats = f"""### 📊 规则统计
-| 规则类型 | 规则数量 | 下载链接 |
-| :--- | :--- | :--- |
-{table_rows}
-**⏰ 最后更新时间**: {date_str}
-"""
+    # 注意：这里的标记位必须保持这一行的纯净
+    new_block = f"\n### 📊 规则统计\n| 规则类型 | 规则数量 | 下载链接 |\n| :--- | :--- | :--- |\n{table_rows}\n**⏰ 最后更新时间**: {date_str}\n"
 
-    # 使用正则定位 和 并替换
+    # 2. 使用正则匹配。核心逻辑：匹配从 到 的所有内容
+    # 修复：防止因为换行符不同导致的匹配失败
     pattern = re.compile(r'.*?', re.DOTALL)
+
     if pattern.search(content):
-        updated_content = pattern.sub(new_stats, content)
-        with open(README_FILE, 'w', encoding='utf-8') as f:
-            f.write(updated_content)
-        print("README.md 统计数据已更新")
+        # 如果找到了标记位，直接精准替换
+        updated_content = pattern.sub(new_block, content)
+        print("发现标记位，执行精准替换。")
     else:
-        print("错误：README.md 中未发现 标记位")
+        # 如果找不到标记位，说明你的 README 里标记写错了或没了
+        # 为了防止继续无限追加，我们报错并提示你手动检查
+        print("！！！致命错误：在 README.md 中没找到匹配的标记位 ！！！")
+        print("请检查 README.md 是否包含完整的 和 ")
+        return
+
+    with open(readme_path, 'w', encoding='utf-8') as f:
+        f.write(updated_content)
 
 def run():
     # 规则分类容器
