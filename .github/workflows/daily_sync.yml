@@ -8,16 +8,18 @@ on:
     paths:
       - 'sources.txt'
       - 'main_executor.py'
-      - 'custom-rules/**' # 当你修改本地规则文件时也触发
+      - 'custom-rules/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      TZ: Asia/Shanghai  # 强制虚拟机使用上海时区
+      TZ: Asia/Shanghai
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取所有历史记录以支持 rebase
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,5 +37,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add dist/*.txt README.md
-          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
-          git push
+          
+          # 检查是否有文件变更，有则提交
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S')"
+            # 解决图片中的 rejected 问题：先拉取远程更新再推送
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
