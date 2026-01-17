@@ -1,5 +1,6 @@
-! Name: My Classified hosts_rules
-! Total lines: 4928
+#更新日期：260117
+#规则数：4928
+! Title: Hosts 屏蔽规则
 ! ------------------------------------
 
 0.0.0.0 01.adnxs.com
