@@ -1,72 +1,77 @@
 import requests
 import re
 import os
+from datetime import datetime
 
 def run():
-    # 准备分类容器
-    collections = {
-        'hosts_rules': set(),    # 仅保留标准 0.0.0.0 屏蔽规则
-        'adblock_rules': set(),  # 标准语法
-        'adguard_rules': set(),  # 高级修饰符
-        'whitelist': set()       # 白名单
-    }
+    # 准备容器
+    # 为了保证你的需求，我们把所有拦截类规则合并，白名单单独放
+    combined_intercept = set()
+    whitelist = set()
 
     if not os.path.exists('sources.txt'):
-        print("Error: sources.txt 不存在")
+        print("错误: 找不到 sources.txt")
         return
         
     with open('sources.txt', 'r') as f:
         urls = [line.strip() for line in f if line.strip().startswith('http')]
 
     for url in urls:
-        print(f"正在抓取: {url}")
+        print(f"正在同步: {url}")
         try:
             r = requests.get(url, timeout=15)
             for line in r.text.splitlines():
                 line = line.strip()
                 
-                # 跳过空行
-                if not line:
-                    continue
-
-                # --- 1. 处理白名单 (优先级最高) ---
+                # 1. 处理白名单
                 if line.startswith('@@'):
-                    collections['whitelist'].add(line)
+                    whitelist.add(line)
                     continue
 
-                # --- 2. 处理 Hosts 规则 (严格过滤模式) ---
-                # 只匹配以 127.0.0.1 或 0.0.0.0 开头的行
-                # 排除注释行，且不保留原始 IP，统一转为 0.0.0.0
+                # 2. 核心逻辑：保留注释以外的所有拦截规则
+                # 匹配 Hosts 格式 (0.0.0.0 或 127.0.0.1)
                 host_match = re.match(r'^(?:127\.0\.0\.1|0\.0\.0\.0)\s+([a-zA-Z0-9\-\.\_]+)', line)
                 if host_match:
                     domain = host_match.group(1)
-                    # 排除掉 localhost 等本地环回地址，只保留广告域名
-                    if domain not in ['localhost', 'localhost.localdomain', 'broadcasthost']:
-                        collections['hosts_rules'].add(f"0.0.0.0 {domain}")
+                    if domain not in ['localhost', 'localhost.localdomain']:
+                        combined_intercept.add(f"0.0.0.0 {domain}")
                     continue
 
-                # --- 3. 处理 AdGuard/Adblock (跳过所有以 # 或 ! 开头的注释) ---
-                if line.startswith('!') or line.startswith('#'):
+                # 3. 核心逻辑：保留 || 开头的 Adblock 规则 (如你提到的 kakamobi.cn)
+                if line.startswith('||'):
+                    combined_intercept.add(line)
                     continue
-
-                if '##' in line or '#%#' in line or '$' in line:
-                    collections['adguard_rules'].add(line)
-                elif line.startswith('||'):
-                    collections['adblock_rules'].add(line)
+                
+                # 4. 其他有效规则 (非注释、非空行)
+                if line and not (line.startswith('!') or line.startswith('#')):
+                    combined_intercept.add(line)
+                    
         except Exception as e:
-            print(f"访问失败 {url}: {e}")
+            print(f"失败: {url}, 错误: {e}")
 
-    # 3. 导出到 dist 文件夹
+    # --- 写入文件逻辑 ---
     os.makedirs('dist', exist_ok=True)
-    for name, rules in collections.items():
-        if rules:
-            with open(f'dist/{name}.txt', 'w', encoding='utf-8') as f:
-                # 写入简单的文件头
-                f.write(f"! Name: My Classified {name}\n")
-                f.write(f"! Total lines: {len(rules)}\n")
-                f.write("! ------------------------------------\n\n")
-                # 排序写入，保证文件整洁
-                f.write("\n".join(sorted(list(rules))))
+    
+    # 生成日期格式：260117 (YYMMDD)
+    date_str = datetime.now().strftime('%y%m%d')
+    
+    # 写入拦截规则总表
+    if combined_intercept:
+        with open('dist/rules.txt', 'w', encoding='utf-8') as f:
+            # 写入你要求的 Header
+            f.write(f"#更新日期：{date_str}\n")
+            f.write(f"#规则数：{len(combined_intercept)}\n")
+            f.write(f"! Title: 去广告规则\n")
+            f.write("! ------------------------------------\n\n")
+            f.write("\n".join(sorted(list(combined_intercept))))
+
+    # 写入白名单 (如果有)
+    if whitelist:
+        with open('dist/whitelist.txt', 'w', encoding='utf-8') as f:
+            f.write(f"#更新日期：{date_str}\n")
+            f.write(f"#规则数：{len(whitelist)}\n")
+            f.write(f"! Title: 白名单规则\n\n")
+            f.write("\n".join(sorted(list(whitelist))))
 
 if __name__ == "__main__":
     run()
