@@ -4,9 +4,11 @@ import os
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import urllib3
+import sys
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# 配置映射
 TITLE_MAP = {
     'hosts_rules.txt': 'Hosts 屏蔽规则',
     'adguard_rules.txt': 'AdGuard 过滤规则',
@@ -16,7 +18,7 @@ TITLE_MAP = {
 def get_file_header(filename, count):
     date_str = datetime.now().strftime('%Y年%m月%d日')
     display_name = TITLE_MAP.get(filename, filename.replace('.txt', ''))
-    return f"# 更新日期：{date_str}\n# 规则数：{count}\n! Title: {display_name}\n! ------------------------------------\n\n"
+    return f"# 更新日期：{date_str}\n# 规则数：{count}\n! Title: {display_name}\n\n"
 
 def fetch_url(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
@@ -28,12 +30,14 @@ def fetch_url(url):
 
 def update_readme(file_stats):
     readme_path = 'README.md'
-    if not os.path.exists(readme_path): return
+    if not os.path.exists(readme_path): 
+        print("README.md 不存在")
+        return
 
     with open(readme_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 1. 构造新表格
+    # 1. 构造新表格内容
     table_rows = ""
     for filename in sorted(file_stats.keys()):
         count = file_stats[filename]
@@ -44,7 +48,7 @@ def update_readme(file_stats):
     start_marker = ""
     end_marker = ""
 
-    # 2. 物理分割逻辑，彻底杜绝重复追加
+    # 2. 物理分割逻辑
     if start_marker in content and end_marker in content:
         before = content.split(start_marker)[0]
         after = content.split(end_marker)[-1]
@@ -56,21 +60,21 @@ def update_readme(file_stats):
             f"{table_rows}\n"
             f"**⏰ 最后更新时间**: {date_str}\n"
         )
-        # 重新组装，确保标记位被完整保留
+        # 重新拼接
         updated_content = before + start_marker + new_stats + end_marker + after
-        
         with open(readme_path, 'w', encoding='utf-8') as f:
             f.write(updated_content.strip() + "\n")
-        print("README 统计已更新。")
+        print("README 更新成功")
     else:
-        # 如果找不到标记位，直接报错退出，GitHub Action 会显示红色，但不会搞乱文件
-        print(f"Error: 找不到标记位 {start_marker} 或 {end_marker}")
-        import sys
-        sys.exit(1)
+        print("！！！致命错误：README.md 里没找到标记位！！！")
+        sys.exit(1) # 这就是你图片里报错的原因
 
 def run():
     collections = {'hosts_rules.txt': set(), 'adguard_rules.txt': set(), 'whitelist.txt': set()}
-    if not os.path.exists('sources.txt'): return
+    if not os.path.exists('sources.txt'): 
+        print("缺少 sources.txt")
+        return
+        
     with open('sources.txt', 'r', encoding='utf-8') as f:
         urls = re.findall(r'https?://[^\s\]]+', f.read())
 
@@ -95,9 +99,10 @@ def run():
     for filename, rules in collections.items():
         if rules:
             file_stats[filename] = len(rules)
-            with open(f'dist/{filename}', 'w', encoding='utf-8') as f:
+            with open(os.path.join('dist', filename), 'w', encoding='utf-8') as f:
                 f.write(get_file_header(filename, len(rules)))
                 f.write("\n".join(sorted(list(rules))))
+    
     update_readme(file_stats)
 
 if __name__ == "__main__":
