@@ -5,9 +5,15 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import urllib3
 
+# 禁用不安全请求的警告
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# 配置：文件名对应的显示名称
+# --- 配置区 ---
+SOURCES_FILE = 'sources.txt'
+README_FILE = 'README.md'
+DIST_DIR = 'dist'
+
+# 文件名与 README 中显示名称的对应关系
 TITLE_MAP = {
     'hosts_rules.txt': 'Hosts 屏蔽规则',
     'adguard_rules.txt': 'AdGuard 过滤规则',
@@ -15,38 +21,42 @@ TITLE_MAP = {
 }
 
 def get_file_header(filename, count):
+    """为生成的规则文件添加头部信息"""
     date_str = datetime.now().strftime('%Y年%m月%d日')
     display_name = TITLE_MAP.get(filename, filename.replace('.txt', ''))
     return f"# 更新日期：{date_str}\n# 规则数：{count}\n! Title: {display_name}\n! ------------------------------------\n\n"
 
 def fetch_url(url):
+    """抓取 URL 内容"""
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     try:
         r = requests.get(url, headers=headers, timeout=30, verify=False)
         if r.status_code == 200:
             return r.text.splitlines()
-    except:
-        pass
+    except Exception as e:
+        print(f"抓取失败 {url}: {e}")
     return []
 
-def update_live_readme(file_stats):
-    """
-    file_stats: 格式为 {'文件名.txt': 数量, ...}
-    根据实际生成的文件数量，动态构建表格
-    """
-    readme_path = 'README.md'
-    if not os.path.exists(readme_path): return
+def update_readme(file_stats):
+    """根据实际生成的文件和数量，动态更新 README.md"""
+    if not os.path.exists(README_FILE):
+        print("未找到 README.md，跳过更新")
+        return
 
-    with open(readme_path, 'r', encoding='utf-8') as f:
+    with open(README_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 构建表格行
+    # 构建动态表格行
     table_rows = ""
-    for filename, count in sorted(file_stats.items()):
+    # 按照 TITLE_MAP 的顺序排序，保证表格整齐
+    for filename in sorted(file_stats.keys()):
+        count = file_stats[filename]
         display_name = TITLE_MAP.get(filename, filename.replace('.txt', ''))
         table_rows += f"| **{display_name}** | {count} | [点击下载](./dist/{filename}) |\n"
 
     date_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # 构建要替换进去的完整块
     new_stats = f"""### 📊 规则统计
 | 规则类型 | 规则数量 | 下载链接 |
 | :--- | :--- | :--- |
@@ -54,60 +64,72 @@ def update_live_readme(file_stats):
 **⏰ 最后更新时间**: {date_str}
 """
 
+    # 使用正则定位 和 并替换
     pattern = re.compile(r'.*?', re.DOTALL)
     if pattern.search(content):
-        with open(readme_path, 'w', encoding='utf-8') as f:
-            f.write(pattern.sub(new_stats, content))
-        print("README 统计已根据实际文件数量自动更新。")
+        updated_content = pattern.sub(new_stats, content)
+        with open(README_FILE, 'w', encoding='utf-8') as f:
+            f.write(updated_content)
+        print("README.md 统计数据已更新")
+    else:
+        print("错误：README.md 中未发现 标记位")
 
 def run():
-    # 使用字典，支持动态增加分类
+    # 规则分类容器
     collections = {
         'hosts_rules.txt': set(),
         'adguard_rules.txt': set(),
         'whitelist.txt': set()
     }
 
-    if not os.path.exists('sources.txt'): return
-    with open('sources.txt', 'r', encoding='utf-8') as f:
+    if not os.path.exists(SOURCES_FILE):
+        print(f"错误: 找不到 {SOURCES_FILE}")
+        return
+        
+    with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
         urls = re.findall(r'https?://[^\s\]]+', f.read())
 
+    print(f"开始抓取 {len(urls)} 个源...")
     with ThreadPoolExecutor(max_workers=10) as executor:
         results = executor.map(fetch_url, urls)
 
     for lines in results:
         for line in lines:
             line = line.strip()
-            if not line or line.startswith('!') or (line.startswith('#') and not line.startswith('##')):
+            # 排除空行和简单的注释（! 或 #空格），但保留 ### 规则
+            if not line or line.startswith('!') or line.startswith('# '):
                 continue
             
-            # 1. 白名单判定
+            # 1. 判定白名单
             if line.startswith('@@'):
                 collections['whitelist.txt'].add(line)
-            # 2. Hosts 判定
+            # 2. 判定 Hosts 格式
             elif line.startswith('0.0.0.0') or line.startswith('127.0.0.1'):
                 parts = line.split()
                 if len(parts) >= 2:
-                    collections['hosts_rules.txt'].add(f"0.0.0.0 {parts[1]}")
-            # 3. 其他所有规则（CSS, 通配符等）
+                    # 统一转成 0.0.0.0 并提取域名
+                    domain = parts[1]
+                    collections['hosts_rules.txt'].add(f"0.0.0.0 {domain}")
+            # 3. 剩下的全放进 AdGuard 规则
             else:
                 collections['adguard_rules.txt'].add(line)
 
-    # 过滤掉空的分类，只处理有内容的文件
-    active_collections = {k: v for k, v in collections.items() if v}
-    
-    os.makedirs('dist', exist_ok=True)
+    # 处理保存逻辑
+    os.makedirs(DIST_DIR, exist_ok=True)
     file_stats = {}
 
-    for filename, rules in active_collections.items():
-        count = len(rules)
-        file_stats[filename] = count
-        with open(f'dist/{filename}', 'w', encoding='utf-8') as f:
-            f.write(get_file_header(filename, count))
-            f.write("\n".join(sorted(list(rules))))
+    for filename, rules in collections.items():
+        if rules:  # 只有当该分类有规则时才创建文件
+            count = len(rules)
+            file_stats[filename] = count
+            file_path = os.path.join(DIST_DIR, filename)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(get_file_header(filename, count))
+                f.write("\n".join(sorted(list(rules))))
+            print(f"已生成: {filename} (共 {count} 条)")
 
-    # 动态统计：生成了几个文件，README 就列出几个
-    update_live_readme(file_stats)
+    # 更新 README 统计
+    update_readme(file_stats)
 
 if __name__ == "__main__":
     run()
