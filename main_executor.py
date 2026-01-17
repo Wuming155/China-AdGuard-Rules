@@ -76,7 +76,6 @@ def get_file_stats(folder_path):
     return stats_list
 
 def update_readme(all_file_stats):
-    """更新 README.md 中的统计表格"""
     readme_path = Path('README.md')
     if not readme_path.exists(): return
     content = readme_path.read_text(encoding='utf-8')
@@ -91,10 +90,15 @@ def update_readme(all_file_stats):
         download_url = f"[点击下载]({raw_base}/{item['folder']}/{safe_name})"
         table_rows += f"| {item['name']} | {item['count']} | {download_url} |\n"
     
-    table_content = f"{table_header}{table_rows}\n⏰ 最后更新: {now}\n"
+    # 确保时间戳被包裹在标识符内，或者正则能匹配到它
+    table_content = f"{table_header}{table_rows}\n\n⏰ 最后更新: {now}\n"
     
+    # 修改这里的正则：确保它能匹配到旧的时间戳并替换
+    # 这个正则会匹配 ## 规则统计 到 下一个标题 或 文件末尾的所有内容
     pattern = r"(## 规则统计[\s\S]*?)(?=## |$)"
-    new_content = re.sub(pattern, f"## 规则统计\n\n{table_content}\n", content)
+    new_section = f"## 规则统计\n\n{table_content}"
+    
+    new_content = re.sub(pattern, new_section, content)
     readme_path.write_text(new_content, encoding='utf-8')
 
 def main():
