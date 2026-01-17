@@ -101,7 +101,18 @@ def main():
     dist_dir.mkdir(exist_ok=True)
     for name, rules in collections.items():
         sorted_rules = sorted(list(rules))
-        (dist_dir / f"{name}.txt").write_text(f"! Total: {len(sorted_rules)}\n\n" + "\n".join(sorted_rules), encoding='utf-8')
+        
+        # 1. 定义头部参数列表
+        header = [
+            f"! Title: {name.replace('_', ' ').title()}",
+            f"! Homepage: https://github.com/{GITHUB_REPO}",
+            f"! Total Rules: {len(sorted_rules)}",
+            f"! Last Update: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "!\n"
+        ]
+        
+        # 2. 将头部与规则内容合并写入
+        (dist_dir / f"{name}.txt").write_text("\n".join(header) + "\n".join(sorted_rules), encoding='utf-8')
 
     # 4. 【核心需求】扫描两个文件夹并更新表格
     all_stats = get_file_stats('custom-rules') + get_file_stats('dist')
