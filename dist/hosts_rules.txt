@@ -1,5 +1,8 @@
-! Total: 6088
-
+! Title: Hosts Rules
+! Homepage: https://github.com/Wuming155/China-AdGuard-Rules
+! Total Rules: 6088
+! Last Update: 2026-01-17 23:15:14
+!
 0.0.0.0 0.r.msn.com
 0.0.0.0 01.adnxs.com
 0.0.0.0 1.oadz.com
