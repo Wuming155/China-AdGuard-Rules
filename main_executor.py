@@ -85,7 +85,6 @@ def update_readme(stats):
 
 ⏰ 最后更新: {now}
 """
-    # 匹配 ## 规则统计 标题到下一个标题之间的内容
     pattern = r"(## 规则统计[\s\S]*?)(?=## |$)"
     if re.search(pattern, content):
         new_content = re.sub(pattern, f"## 规则统计\n{table_content}\n", content)
@@ -99,26 +98,41 @@ def main():
     resolver = RuleResolver()
     collections = {'hosts_rules': set(), 'whitelist': set(), 'adguard_rules': set()}
     
-    # 1. 读取源链接
+    # 1. 读取本地自定义规则 (新增加的部分)
+    custom_dir = 'custom-rules'
+    if os.path.exists(custom_dir):
+        print(f"正在处理本地规则目录: {custom_dir}")
+        for root, _, files in os.walk(custom_dir):
+            for file in files:
+                if file.endswith('.txt'):
+                    file_path = os.path.join(root, file)
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            rtype, rule = resolver.resolve(line)
+                            if rtype:
+                                collections[rtype].add(rule)
+
+    # 2. 读取源链接
     if not os.path.exists('sources.txt'):
-        print("错误: 找不到 sources.txt")
-        return
-        
-    with open('sources.txt', 'r', encoding='utf-8') as f:
-        urls = [l.strip() for l in f if l.strip().startswith('http')]
+        print("警告: 找不到 sources.txt，将仅处理本地规则")
+        urls = []
+    else:
+        with open('sources.txt', 'r', encoding='utf-8') as f:
+            urls = [l.strip() for l in f if l.strip().startswith('http')]
 
-    # 2. 并发下载与解析
-    session = get_session()
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = {executor.submit(fetch_url, url, session): url for url in urls}
-        for future in as_completed(futures):
-            lines = future.result()
-            for line in lines:
-                rtype, rule = resolver.resolve(line)
-                if rtype:
-                    collections[rtype].add(rule)
+    # 3. 并发下载与解析远程规则
+    if urls:
+        session = get_session()
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(fetch_url, url, session): url for url in urls}
+            for future in as_completed(futures):
+                lines = future.result()
+                for line in lines:
+                    rtype, rule = resolver.resolve(line)
+                    if rtype:
+                        collections[rtype].add(rule)
 
-    # 3. 写入结果文件
+    # 4. 写入结果文件
     os.makedirs('dist', exist_ok=True)
     stats = {}
     update_time = datetime.now().strftime('%Y-%m-%d %H:%M')
@@ -131,7 +145,7 @@ def main():
             f.write(f"! Total Rules: {len(sorted_list)}\n\n")
             f.write("\n".join(sorted_list))
     
-    # 4. 更新 README
+    # 5. 更新 README
     update_readme(stats)
     print("任务全部完成！")
 
