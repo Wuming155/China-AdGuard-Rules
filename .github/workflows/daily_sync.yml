@@ -8,7 +8,7 @@ on:
     paths:
       - 'sources.txt'
       - 'main_executor.py'
-      - 'custom-rules/**'
+      - 'custom-rules/**' # 监听本地规则文件夹变动
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 获取所有历史记录以支持 rebase
+          fetch-depth: 0 # 获取完整历史以支持 pull
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,10 +38,10 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add dist/*.txt README.md
           
-          # 检查是否有文件变更，有则提交
+          # 检查是否有变更需要提交
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S')"
-            # 解决图片中的 rejected 问题：先拉取远程更新再推送
+            # 关键：先拉取远程更新解决 image_d42866.png 中的冲突
             git pull --rebase origin main
             git push origin main
           else
