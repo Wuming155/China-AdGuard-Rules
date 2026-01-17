@@ -1,5 +1,5 @@
 #更新日期：2026年01月17日
-#规则数：901
+#规则数：900
 ! Title: AdGuard 过滤规则
 ! ------------------------------------
 
@@ -8,7 +8,6 @@
 *-ad.wtzw.com*
 *-be-pack-sign.pglstatp-toutiao.com*
 *-normal.zijieapi.com*
-::1 ip6-localhost
 ||1500020991.vodplayer.wxamedia.com^
 ||1500022744.vodplayer.wxamedia.com^
 ||1500026601.vodplayer.wxamedia.com^
