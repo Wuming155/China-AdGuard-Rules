@@ -2,26 +2,41 @@ name: Daily Rules Sync
 
 on:
   schedule:
-    - cron: '0 22 * * *' # 每天凌晨运行
+    - cron: '0 22 * * *' 
   workflow_dispatch:
+
+# 核心：授予 actions 写入权限
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests urllib3
+
       - name: Run Script
         run: python main_executor.py
+
       - name: Commit and Push
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Action"
           git add dist/*.txt
-          git commit -m "Auto-update rules" || exit 0
-          git push
+          # 只有在有变动时才提交，防止 workflow 报错
+          if git diff --cached --quiet; then
+            echo "没有发现规则变动。"
+          else
+            git commit -m "自动更新规则: $(date +'%Y-%m-%d %H:%M')"
+            git push origin HEAD:main
+          fi
