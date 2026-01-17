@@ -12,12 +12,5 @@
 
 ⏰ 最后更新: 2026-01-17 22:04:14
 
-## 使用说明
-
-1. 下载所需的规则文件
-2. 在AdGuard客户端中添加自定义规则
-3. 定期更新以保持最佳效果
-
-## 贡献
-
-欢迎提交Issue和Pull Request来改进规则库！
+## 源文件说明
+1.自定义的白名单：https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/refs/heads/main/custom-rules/custom_whitelist.txt
