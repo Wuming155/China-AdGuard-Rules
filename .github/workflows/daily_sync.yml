@@ -3,12 +3,12 @@ name: Update Rules and README
 on:
   schedule:
     - cron: '0 0 * * *' # 每天凌晨自动运行
-  workflow_dispatch:      # 允许手动点击运行
+  workflow_dispatch:      # 允许手动在 GitHub 页面点击运行
   push:
     paths:
       - 'sources.txt'
       - 'main_executor.py'
-      - 'custom-rules/**' # 只要 custom-rules 文件夹有变动就触发更新
+      - 'custom-rules/**' # 只要自定义规则文件夹有任何变动就触发
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 获取完整历史，这是解决 pull --rebase 报错的前提
+          fetch-depth: 0 # 获取完整提交历史，解决 pull --rebase 冲突
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,7 +30,7 @@ jobs:
         run: pip install requests urllib3
 
       - name: Run Update Script
-        # 运行脚本，它会扫描 custom-rules 和 dist 并更新 README 统计表
+        # 执行脚本：扫描 custom-rules 和 dist 文件夹并写进统计表
         run: python main_executor.py 
 
       - name: Commit and Push
@@ -38,15 +38,15 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 添加所有变动（包含 dist 里的新规则和 README 的新表格）
+          # 暂存所有修改（包含 dist 文件夹和 README.md）
           git add .
           
-          # 检查是否有内容需要提交，避免空提交报错
+          # 检查是否有文件变更
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Auto Update Stats: $(date +'%Y-%m-%d %H:%M:%S')"
             
-            # 【关键】解决你图片中遇到的 [rejected] 报错
-            # 先拉取远程更新并合并，确保推送不会被拒绝
+            # 【核心解决】处理推送被拒绝 (Rejected) 的问题
+            # 先拉取远程最新代码并 rebase，确保推送顺畅
             git pull --rebase origin main
             
             git push origin main

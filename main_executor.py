@@ -53,17 +53,19 @@ def update_readme(all_file_stats):
     raw_base = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main"
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    # 构建动态表格
-    table_header = "| 规则文件 | 规则数量 | 所在目录 | 下载链接 |\n| :--- | :--- | :--- | :--- |\n"
+    # --- 修改这里：去掉了“所在目录”列 ---
+    table_header = "| 规则文件 | 规则数量 | 下载链接 |\n| :--- | :--- | :--- |\n"
     table_rows = ""
     for item in all_file_stats:
+        # 对文件名进行编码，处理空格和 & 符号
         safe_name = item['name'].replace(" ", "%20").replace("&", "%26")
         download_url = f"[点击下载]({raw_base}/{item['folder']}/{safe_name})"
-        table_rows += f"| {item['name']} | {item['count']} | {item['folder']} | {download_url} |\n"
+        # 只保留文件名、数量和下载链接
+        table_rows += f"| {item['name']} | {item['count']} | {download_url} |\n"
     
     table_content = f"{table_header}{table_rows}\n⏰ 最后更新: {now}\n"
     
-    # 精准替换 ## 规则统计 下的内容
+    # 替换 README 中 ## 规则统计 下的内容
     pattern = r"(## 规则统计[\s\S]*?)(?=## |$)"
     new_content = re.sub(pattern, f"## 规则统计\n\n{table_content}\n", content)
     readme_path.write_text(new_content, encoding='utf-8')
