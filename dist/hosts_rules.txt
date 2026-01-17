@@ -1,15 +1,17 @@
 ! Title: Hosts Rules
 ! Homepage: https://github.com/Wuming155/China-AdGuard-Rules
-! Total Rules: 6088
-! Last Update: 2026-01-17 23:15:14
+! Total Rules: 6073
+! Last Update: 2026-01-17 23:23:22
 !
+0.0.0.0 *-inapps.appsflyersdk.com
+0.0.0.0 *-launches.appsflyersdk.com
+0.0.0.0 *.bjmantis.net
+0.0.0.0 *.nrb.footprintdns.com
 0.0.0.0 0.r.msn.com
 0.0.0.0 01.adnxs.com
 0.0.0.0 1.oadz.com
 0.0.0.0 1.z74d.com
 0.0.0.0 1010pic.com
-0.0.0.0 103.107.217.2
-0.0.0.0 103.107.217.65
 0.0.0.0 104094.bid.domob.cn
 0.0.0.0 104095.bid.domob.cn
 0.0.0.0 104148.bid.domob.cn
@@ -40,24 +42,14 @@
 0.0.0.0 105187.bid.domob.cn
 0.0.0.0 106k.l.mob.com
 0.0.0.0 1106.l.mob.com
-0.0.0.0 114.118.4.4
 0.0.0.0 117b.l.mob.com
-0.0.0.0 118.89.204.198
 0.0.0.0 11f3.l.mob.com
 0.0.0.0 127.irs01.com
-0.0.0.0 129.227.17.142
-0.0.0.0 129.227.17.145
-0.0.0.0 129.227.17.163
-0.0.0.0 129.227.29.163
-0.0.0.0 129.227.29.192
-0.0.0.0 13.213.183.160
-0.0.0.0 13.214.52.63
 0.0.0.0 1379.l.mob.com
 0.0.0.0 13gv.l.mob.com
 0.0.0.0 13j5.l.mob.com
 0.0.0.0 13r6.l.mob.com
 0.0.0.0 1417.oadz.com
-0.0.0.0 142.251.43.10
 0.0.0.0 1426.l.mob.com
 0.0.0.0 144e.l.mob.com
 0.0.0.0 15.taboola.com
@@ -68,7 +60,6 @@
 0.0.0.0 16dd-advertise-1252317822.file.myqcloud.com
 0.0.0.0 16dd-advertise-1252317822.image.myqcloud.com
 0.0.0.0 1722.oadz.com
-0.0.0.0 182.254.116.116
 0.0.0.0 1980_s.gw.irs03.com
 0.0.0.0 1a839d.api1.shuzilm.cn
 0.0.0.0 1alog.umeng.com
@@ -77,13 +68,8 @@
 0.0.0.0 2012.8684.com
 0.0.0.0 2016.appsflyer.com
 0.0.0.0 2020.cnzz.com
-0.0.0.0 203.205.137.89
 0.0.0.0 2043.oadz.com
 0.0.0.0 2052.flash2-http.qq.com
-0.0.0.0 216.239.35.0
-0.0.0.0 216.239.35.12
-0.0.0.0 216.239.35.4
-0.0.0.0 216.239.35.8
 0.0.0.0 2311.oadz.com
 0.0.0.0 2345.oadz.com
 0.0.0.0 2417_s.gw.irs03.com
@@ -117,9 +103,7 @@
 0.0.0.0 3p-geo.yahoo.com
 0.0.0.0 3p-udc.yahoo.com
 0.0.0.0 4img.mgtv.com
-0.0.0.0 52.77.59.64
 0.0.0.0 5290727.fls.doubleclick.net
-0.0.0.0 58.242.130.102
 0.0.0.0 64511.a.irs01.com
 0.0.0.0 64979.a.irs01.com
 0.0.0.0 667057482479489024-rta-api.dutils.com
@@ -1434,7 +1418,7 @@
 0.0.0.0 beacon.sina.com.cn
 0.0.0.0 beacon.tingyun.com
 0.0.0.0 beaconcdn.qq.com
-0.0.0.0 beacons
+0.0.0.0 beacons*.gvt3.com
 0.0.0.0 beacons.gvt2.com
 0.0.0.0 beaconserver-ce-vpc0-1537565064.eu-west-1.elb.amazonaws.com
 0.0.0.0 beaconserver-ce-vpc0-1909323404.us-west-2.elb.amazonaws.com
@@ -2418,7 +2402,7 @@
 0.0.0.0 fodder.qq.com
 0.0.0.0 fodder.tc.qq.com
 0.0.0.0 fonts.googleapis.com
-0.0.0.0 fp-it
+0.0.0.0 fp-it*.fengkongcloud.com
 0.0.0.0 fp-it.fengkongcloud.com
 0.0.0.0 fp-it.portal101.cn
 0.0.0.0 fp.tongdun.net
@@ -3237,7 +3221,8 @@
 0.0.0.0 lmbsy.qq.com
 0.0.0.0 location.ximalaya.com
 0.0.0.0 lofter.httpdns.c.163.com
-0.0.0.0 log
+0.0.0.0 log*-misc-lf.amemv.com
+0.0.0.0 log*.aliyuncs.com
 0.0.0.0 log-api-mn.huxiu.com
 0.0.0.0 log-api.huxiu.com
 0.0.0.0 log-api.oceanengine.com
@@ -4344,7 +4329,7 @@
 0.0.0.0 register.appsflyer.com
 0.0.0.0 render-server.cdn.bcebos.com
 0.0.0.0 report-stats.ad.jiguang.cn
-0.0.0.0 report.
+0.0.0.0 report.*.qq.com
 0.0.0.0 report.adview.cn
 0.0.0.0 report.baihemob.com
 0.0.0.0 report.banyunjuhe.com
