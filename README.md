@@ -4,13 +4,15 @@
 
 ## 规则统计
 
-| 规则类型 | 规则数量 | 下载链接 |
-| :--- | :--- | :--- |
-| AdGuard 语法 | 163750 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/adguard_rules.txt) |
-| Hosts 屏蔽 | 6088 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/hosts_rules.txt) |
-| 白名单放行 | 7611 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/whitelist.txt) |
+| 规则文件 | 规则数量 | 所在目录 | 下载链接 |
+| :--- | :--- | :--- | :--- |
+| Clean Bing & DuckDuckGo.txt | 13 | custom-rules | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/custom-rules/Clean%20Bing%20%26%20DuckDuckGo.txt) |
+| custom_whitelist.txt | 1 | custom-rules | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/custom-rules/custom_whitelist.txt) |
+| whitelist.txt | 7611 | dist | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/whitelist.txt) |
+| adguard_rules.txt | 161981 | dist | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/adguard_rules.txt) |
+| hosts_rules.txt | 6088 | dist | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/hosts_rules.txt) |
 
-⏰ 最后更新: 2026-01-17 22:44:55
+⏰ 最后更新: 2026-01-17 22:51:30
 
 ## 源文件说明
 
