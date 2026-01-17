@@ -1,6 +1,5 @@
 #更新日期：2026年01月17日
-#规则数：7610
-! Title: 白名单放行规则
+#条数：7610
 
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
 @@&http_referer=$domain=chaopx.com
