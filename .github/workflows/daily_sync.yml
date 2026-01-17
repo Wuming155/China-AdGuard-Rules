@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai  # 强制虚拟机使用上海时区
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
