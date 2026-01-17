@@ -90,16 +90,24 @@ def update_readme(all_file_stats):
         download_url = f"[点击下载]({raw_base}/{item['folder']}/{safe_name})"
         table_rows += f"| {item['name']} | {item['count']} | {download_url} |\n"
     
-    # 确保时间戳被包裹在标识符内，或者正则能匹配到它
-    table_content = f"{table_header}{table_rows}\n\n⏰ 最后更新: {now}\n"
+    table_content = f"{table_header}{table_rows}\n⏰ 最后更新: {now}\n"
     
-    # 修改这里的正则：确保它能匹配到旧的时间戳并替换
-    # 这个正则会匹配 ## 规则统计 到 下一个标题 或 文件末尾的所有内容
-    pattern = r"(## 规则统计[\s\S]*?)(?=## |$)"
-    new_section = f"## 规则统计\n\n{table_content}"
+    # --- 核心修复：修改正则表达式 ---
+    # 这里的正则现在可以匹配 "## 一、规则统计" 或者 "## 规则统计"
+    # 它会匹配从 ## 开始包含 "规则统计" 的行，直到遇到下一个 ## 标题
+    pattern = r"(##.*规则统计[\s\S]*?)(?=## |$)"
     
-    new_content = re.sub(pattern, new_section, content)
-    readme_path.write_text(new_content, encoding='utf-8')
+    # 查找是否有匹配项
+    match = re.search(pattern, content)
+    if match:
+        # 提取原来的标题（保留“一、”等内容）
+        original_title_line = match.group(1).split('\n')[0]
+        new_section = f"{original_title_line}\n\n{table_content}\n"
+        new_content = re.sub(pattern, new_section, content)
+        readme_path.write_text(new_content, encoding='utf-8')
+        print(f"README 时间已更新为: {now}")
+    else:
+        print("未能在 README 中找到 '规则统计' 标题部分，请检查标题格式。")
 
 def main():
     resolver = RuleResolver()
