@@ -58,7 +58,7 @@ class RuleResolver:
 def get_file_header(name, count):
     date_str = datetime.now().strftime('%Y年%m月%d日')
     title_map = {
-        'hosts_rules': 'Hosts 屏蔽规则 (包含已失效域名)',
+        'hosts_rules': 'Hosts 屏蔽规则',
         'adguard_rules': 'AdGuard 过滤规则 (CSS/网络拦截)',
         'whitelist': '白名单放行规则'
     }
