@@ -1,5 +1,5 @@
-! Last Update: 2026-01-17 22:04
-! Total Rules: 7610
+! Last Update: 2026-01-17 22:07
+! Total Rules: 7611
 
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
 @@&http_referer=$domain=chaopx.com
@@ -927,6 +927,7 @@
 @@||api.tencentmusic.com^
 @@||api.tiantiantiaosheng.com^
 @@||api.touchnote.io^$xmlhttprequest,domain=app.touchnote.com
+@@||api.trae.cn/cloudide/api/$domain=trae.cn
 @@||api.ts.feedback.qy.net^
 @@||api.tuisong.baidu.com^
 @@||api.tv.sohu.com^
