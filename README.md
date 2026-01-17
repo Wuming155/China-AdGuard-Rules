@@ -10,7 +10,7 @@
 | Hosts 屏蔽 | 6088 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/hosts_rules.txt) |
 | 白名单放行 | 7610 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/whitelist.txt) |
 
-⏰ 最后更新: 2026-01-17 14:01:58
+⏰ 最后更新: 2026-01-17 22:04:14
 
 ## 使用说明
 
