@@ -33,6 +33,7 @@ def update_readme(file_stats):
     with open(readme_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
+    # 1. 构造新的表格块
     table_rows = ""
     for filename in sorted(file_stats.keys()):
         count = file_stats[filename]
@@ -41,30 +42,33 @@ def update_readme(file_stats):
 
     date_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    # 构造替换块
-    new_block = (
-        "\n"
-        "### 📊 规则统计\n"
-        "| 规则类型 | 规则数量 | 下载链接 |\n"
-        "| :--- | :--- | :--- |\n"
-        f"{table_rows}\n"
-        f"**⏰ 最后更新时间**: {date_str}\n"
-        ""
-    )
+    start_marker = ""
+    end_marker = ""
 
-    # 正则替换：匹配两个标记位之间的所有内容
-    pattern = re.compile(r'.*?', re.DOTALL)
-    
-    if pattern.search(content):
-        new_content = pattern.sub(new_block, content)
+    # 2. 核心逻辑：直接物理分割字符串
+    if start_marker in content and end_marker in content:
+        # 保留标记之前的部分
+        before = content.split(start_marker)[0]
+        # 保留标记之后的部分
+        after = content.split(end_marker)[-1]
+        
+        # 重新拼接：前段 + 开始标记 + 新表格 + 结束标记 + 后段
+        new_stats = (
+            f"\n### 📊 规则统计\n"
+            f"| 规则类型 | 规则数量 | 下载链接 |\n"
+            f"| :--- | :--- | :--- |\n"
+            f"{table_rows}\n"
+            f"**⏰ 最后更新时间**: {date_str}\n"
+        )
+        
+        updated_content = before + start_marker + new_stats + end_marker + after
+        
         with open(readme_path, 'w', encoding='utf-8') as f:
-            f.write(new_content)
-        print("README 统计信息已更新。")
+            f.write(updated_content.strip() + "\n")
+        print("README 统计已精准替换。")
     else:
-        # 如果找不到标记位，报错退出，防止重复追加
-        print("Error: Could not find markers in README.md")
-        exit(1)
-
+        # 如果找不到标记，为了防止乱加，直接报错不处理
+        print("！！！错误：README 中找不到标记位，停止更新以防重复！！！")
 def run():
     collections = {'hosts_rules.txt': set(), 'adguard_rules.txt': set(), 'whitelist.txt': set()}
     if not os.path.exists('sources.txt'): return
