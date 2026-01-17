@@ -1,0 +1,19 @@
+! Title: 搜索引擎进化
+! --- 1. 必应 (Bing) 基础净化 ---
+bing.com##div.b_wpt_container.lgwjsfix
+bing.com##li.b_ans
+bing.com##li.b_msg.b_canvas
+bing.com##div.id_tooltip_container
+! --- 2. 必应 (Bing) 解决中国版特有干扰 ---
+! 强制干掉包含“法律”字样的提示块
+bing.com##li:has-text(/根据当地法律/)
+bing.com##div:has-text(/根据当地法律/)
+! --- 3. 必应 (Bing) 屏蔽广告和建议 ---
+bing.com##.b_ad
+bing.com###b_context
+! 解决“相关搜索”等干扰块
+bing.com##li:has-text(/相关搜索|其他人还在搜|还搜索了/)
+bing.com##.b_inline_ajax_rs
+duckduckgo.com##.related-searches
+duckduckgo.com###header-non-nav > div.header--aside.js-header-aside:last-child
+duckduckgo.com##div.footer:nth-child(14) > div:first-child > div.WVvM2VZmaSCvFUapMaYQ.h3EKGeHmRRkjbMqYfNUi.wuwdN2SgDOTwsnBO5PI7.rXBzGoYc_uM83jRoODrM.xWVFEW_kM7bYLASLNfsZ > div.FMPme3X940xAt4SKPFuw > section.aDtqDaYogch0DyrGTrX6 > div.O9Ipab51rBntYb0pwOQn.V_kJtMs7Zyzm6ruq8Z3u
