@@ -1,6 +1,7 @@
 # 更新日期：2026年01月17日
-# 规则数：5002
+# 规则总数：5002
 ! Title: 白名单放行规则
+! Description: 该列表保留了拦截型 Hosts 格式，不进行 DNS 存活性校验以防止漏拦截。
 ! ------------------------------------
 
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
