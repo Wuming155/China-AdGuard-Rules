@@ -62,7 +62,7 @@ def get_file_header(name, count):
         'adguard_rules': 'AdGuard 过滤规则 (CSS/网络拦截)',
         'whitelist': '白名单放行规则'
     }
-    return f"# 更新日期：{date_str}\n# 规则总数：{count}\n! Title: {title_map.get(name, '规则库')}\n! Description: 该列表保留了拦截型 Hosts 格式，不进行 DNS 存活性校验以防止漏拦截。\n! ------------------------------------\n\n"
+    return f"# 更新日期：{date_str}\n# 规则总数：{count}\n! Title: {title_map.get(name, '规则库')}\n! Description: none\n! ------------------------------------\n\n"
 
 def fetch_url(url):
     headers = {
