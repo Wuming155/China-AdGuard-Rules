@@ -61,6 +61,8 @@ def update_readme(stats):
     content = readme_path.read_text(encoding='utf-8')
     raw_base = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/dist"
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # 构建新表格内容
     table_content = f"""
 | 规则类型 | 规则数量 | 下载链接 |
 | :--- | :--- | :--- |
@@ -70,55 +72,50 @@ def update_readme(stats):
 
 ⏰ 最后更新: {now}
 """
-    pattern = r"(## 规则统计[\s\S]*?)(?=## |$)"
+    # 采用更稳健的匹配：匹配 ## 规则统计 标题后的内容，直到下一个二级标题
+    pattern = r"(## 规则统计\n)([\s\S]*?)(?=\n## )"
     if re.search(pattern, content):
-        new_content = re.sub(pattern, f"## 规则统计\n{table_content}\n", content)
+        new_content = re.sub(pattern, r"\1" + table_content, content)
     else:
-        new_content = content + f"\n\n## 规则统计\n{table_content}"
+        # 如果没找到二级标题，尝试匹配到结尾
+        pattern_end = r"(## 规则统计\n)([\s\S]*)"
+        new_content = re.sub(pattern_end, r"\1" + table_content, content)
+
     readme_path.write_text(new_content, encoding='utf-8')
 
 def main():
     resolver = RuleResolver()
     collections = {'hosts_rules': set(), 'whitelist': set(), 'adguard_rules': set()}
     
-    # --- 增强的本地读取逻辑 ---
+    # 1. 优先读取本地 custom-rules
     custom_dir = Path('custom-rules')
-    print(f"检查本地目录: {custom_dir.absolute()}")
-    if custom_dir.exists() and custom_dir.is_dir():
-        local_files = list(custom_dir.glob('**/*.txt'))
-        print(f"找到本地规则文件: {[f.name for f in local_files]}")
-        for file_path in local_files:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        rtype, rule = resolver.resolve(line)
-                        if rtype:
-                            collections[rtype].add(rule)
-            except Exception as e:
-                print(f"读取文件 {file_path} 失败: {e}")
-    else:
-                print("未发现本地 custom-rules 目录")
-
-    # 1. 读取远程源
-    sources_path = Path('sources.txt')
-    urls = []
-    if sources_path.exists():
-        with open(sources_path, 'r', encoding='utf-8') as f:
-            urls = [l.strip() for l in f if l.strip().startswith('http')]
-
-    # 2. 并发下载
-    if urls:
-        session = get_session()
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            futures = {executor.submit(fetch_url, url, session): url for url in urls}
-            for future in as_completed(futures):
-                lines = future.result()
-                for line in lines:
+    if custom_dir.exists():
+        print(f"正在扫描本地目录: {custom_dir.absolute()}")
+        for file_path in custom_dir.glob('*.txt'):
+            print(f"正在读取本地文件: {file_path.name}")
+            with open(file_path, 'r', encoding='utf-8') as f:
+                for line in f:
                     rtype, rule = resolver.resolve(line)
                     if rtype:
                         collections[rtype].add(rule)
 
-    # 3. 写入结果
+    # 2. 读取远程源
+    sources_path = Path('sources.txt')
+    if sources_path.exists():
+        with open(sources_path, 'r', encoding='utf-8') as f:
+            urls = [l.strip() for l in f if l.strip().startswith('http')]
+            if urls:
+                session = get_session()
+                with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                    futures = {executor.submit(fetch_url, url, session): url for url in urls}
+                    for future in as_completed(futures):
+                        lines = future.result()
+                        for line in lines:
+                            rtype, rule = resolver.resolve(line)
+                            if rtype:
+                                collections[rtype].add(rule)
+
+    # 3. 写入 dist
     dist_dir = Path('dist')
     dist_dir.mkdir(exist_ok=True)
     stats = {}
@@ -126,13 +123,14 @@ def main():
     for name in ['hosts_rules', 'adguard_rules', 'whitelist']:
         sorted_list = sorted(list(collections[name]))
         stats[name] = len(sorted_list)
-        output_file = dist_dir / f"{name}.txt"
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(f"! Last Update: {update_time}\n! Total Rules: {len(sorted_list)}\n\n")
-            f.write("\n".join(sorted_list))
+        (dist_dir / f"{name}.txt").write_text(
+            f"! Last Update: {update_time}\n! Total Rules: {len(sorted_list)}\n\n" + "\n".join(sorted_list),
+            encoding='utf-8'
+        )
     
+    # 4. 更新 README
     update_readme(stats)
-    print("任务全部完成！")
+    print(f"处理完成！总计: AdGuard({stats['adguard_rules']}), Hosts({stats['hosts_rules']}), Whitelist({stats['whitelist']})")
 
 if __name__ == "__main__":
     main()
