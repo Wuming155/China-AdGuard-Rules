@@ -1,19 +1,6 @@
-# 更新日期：2026年01月17日
-# 条数：6100
-! Title: Hosts 屏蔽
+! Last Update: 2026-01-17 14:01
+! Total Rules: 6088
 
-0.0.0.0 -didomi.js
-0.0.0.0 -geoIP.js
-0.0.0.0 -scroll-tracker.js
-0.0.0.0 .beacon.min.js
-0.0.0.0 .eloqua.js
-0.0.0.0 .gatracking.js
-0.0.0.0 .outbound-links.pageview-props.revenue.tagged-events.js
-0.0.0.0 .pageview-props.js
-0.0.0.0 .prod.pr.analytics.console.aws.a2z.com
-0.0.0.0 .skimlinks.js
-0.0.0.0 .stape.net
-0.0.0.0 .z.dkt-ib.com
 0.0.0.0 0.r.msn.com
 0.0.0.0 01.adnxs.com
 0.0.0.0 1.oadz.com
@@ -3578,7 +3565,7 @@
 0.0.0.0 mobds.pthejzb.com
 0.0.0.0 mobi.360doc.com
 0.0.0.0 mobile-symbol-upload.tingyun.com
-0.0.0.0 mobile.Banzai.it
+0.0.0.0 mobile.banzai.it
 0.0.0.0 mobile.da.mgtv.com
 0.0.0.0 mobile.shuzilm.cn
 0.0.0.0 mobile.umeng.com

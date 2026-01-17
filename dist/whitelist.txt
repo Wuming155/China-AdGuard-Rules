@@ -1,6 +1,5 @@
-# 更新日期：2026年01月17日
-# 条数：7610
-! Title: 白名单
+! Last Update: 2026-01-17 14:01
+! Total Rules: 7610
 
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
 @@&http_referer=$domain=chaopx.com
