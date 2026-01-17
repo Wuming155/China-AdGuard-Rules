@@ -1,0 +1,27 @@
+name: Daily Rules Sync
+
+on:
+  schedule:
+    - cron: '0 22 * * *' # 每天凌晨运行
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Run Script
+        run: python main_executor.py
+      - name: Commit and Push
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Action"
+          git add dist/*.txt
+          git commit -m "Auto-update rules" || exit 0
+          git push
