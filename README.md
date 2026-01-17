@@ -49,6 +49,7 @@
 * **地址**: `https://raw.githubusercontent.com/qq5460168/666/master/rules.txt`
 * **介绍**: 多功能广告过滤规则集合。
 
-#### 自定义白名单
-**地址**: `https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/refs/heads/main/custom-rules/custom_whitelist.txt`
+### 8. 自定义白名单
+
+* **地址**: `https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/refs/heads/main/custom-rules/custom_whitelist.txt`
 * **介绍**: 日常使用中手动的放行一些域名，减小误杀。
