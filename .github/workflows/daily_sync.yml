@@ -2,17 +2,18 @@ name: Rules Auto Sync
 
 on:
   schedule:
-    - cron: '0 22 * * *'
-  workflow_dispatch:
+    - cron: '0 22 * * *'  # 每天北京时间早上 6 点自动运行
+  workflow_dispatch:      # 允许手动触发运行
 
 permissions:
-  contents: write  # 必须开启，否则无法推送更新
+  contents: write         # 必须开启，否则无法将更新后的 README 推送到仓库
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -22,20 +23,22 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run logic
+      - name: Run Python Logic
         run: python main_executor.py
 
-      - name: Deploy to Branch
+      - name: Commit and Push changes
         run: |
+          # 设置 Git 身份信息
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add dist/*.txt README.md  # 必须包含 README.md
+          
+          # 关键点：同时添加生成的文件和被修改的 README.md
+          git add dist/*.txt README.md
+          
+          # 检查是否有文件变动
           if git diff --cached --quiet; then
-            echo "No changes detected."
+            echo "No changes detected, skipping commit."
           else
-            git commit -m "Auto Update Rules & README: $(date +'%Y-%m-%d')"
-            git push origin HEAD:main
-          fi
-            git commit -m "Auto Update Rules & README: $(date +'%Y-%m-%d %H:%M:%S')"
+            git commit -m "Auto Update Rules & README Statistics: $(date +'%Y-%m-%d %H:%M:%S')"
             git push origin HEAD:main
           fi
