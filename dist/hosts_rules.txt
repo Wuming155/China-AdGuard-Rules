@@ -1,20 +1,6 @@
 # 更新日期：2026年01月17日
-# 规则总数：4941
-! Title: Hosts 屏蔽规则 (Strict)
-! ------------------------------------
+# 规则数：4929
 
-0.0.0.0 -didomi.js
-0.0.0.0 -geoIP.js
-0.0.0.0 -scroll-tracker.js
-0.0.0.0 .beacon.min.js
-0.0.0.0 .eloqua.js
-0.0.0.0 .gatracking.js
-0.0.0.0 .outbound-links.pageview-props.revenue.tagged-events.js
-0.0.0.0 .pageview-props.js
-0.0.0.0 .prod.pr.analytics.console.aws.a2z.com
-0.0.0.0 .skimlinks.js
-0.0.0.0 .stape.net
-0.0.0.0 .z.dkt-ib.com
 0.0.0.0 01.adnxs.com
 0.0.0.0 1.oadz.com
 0.0.0.0 1.z74d.com
@@ -2578,6 +2564,7 @@
 0.0.0.0 livew.l.qq.com
 0.0.0.0 lks.share.mob.com
 0.0.0.0 llmchat.voiceads.cn
+0.0.0.0 localhost
 0.0.0.0 lofter.httpdns.c.163.com
 0.0.0.0 log-api.oceanengine.com
 0.0.0.0 log-api.pangolin-sdk-toutiao-b.com
@@ -4122,7 +4109,6 @@
 0.0.0.0 t.l.qq.com
 0.0.0.0 t.pg.cn.miaozhen.com
 0.0.0.0 t.sj.qq.com
-0.0.0.0 t.yesware.com
 0.0.0.0 t03-api.xlmc.xunlei.com
 0.0.0.0 t5.taboola.com
 0.0.0.0 t7z.cupid.iqiyi.com
