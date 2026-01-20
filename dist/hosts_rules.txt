@@ -1,7 +1,7 @@
 ! Title: Hosts Rules
 ! Homepage: https://github.com/Wuming155/China-AdGuard-Rules
 ! Total Rules: 6073
-! Last Update: 2026-01-19 09:17:30
+! Last Update: 2026-01-20 09:13:05
 !
 0.0.0.0 *-inapps.appsflyersdk.com
 0.0.0.0 *-launches.appsflyersdk.com
