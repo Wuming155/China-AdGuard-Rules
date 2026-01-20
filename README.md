@@ -17,7 +17,7 @@
 ## 二、注意事项
 1.custom_whitelist.txt包含在whitelist.txt中，用于自定义放行的域名。
 
-2.中国时间每天早上8点更新一次规则。
+2.中国时间每天早上更新一次规则。
 
 3.whitelist.txt、hosts_rules.txt、adguard_rules.txt为合并的规则，其余均为自用。
 
