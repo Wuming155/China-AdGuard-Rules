@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/China-AdGuard-Rules
 ! Total Rules: 7615
-! Last Update: 2026-01-22 09:15:15
+! Last Update: 2026-01-23 09:14:04
 !
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
 @@&http_referer=$domain=chaopx.com
