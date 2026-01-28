@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/China-AdGuard-Rules
-! Total Rules: 7619
-! Last Update: 2026-01-27 09:19:08
+! Total Rules: 7622
+! Last Update: 2026-01-28 09:14:28
 !
 @@$cookie=__gads,domain=godstoryinfo.com|laweducationinfo.com|rsgames.xyz|vichitrainfo.com
 @@&http_referer=$domain=chaopx.com
@@ -4684,6 +4684,7 @@
 @@||mix.dj/jscripts/jquery/mdj_adverts.js$script
 @@||mix.sina.com.cn^
 @@||mixer.sina.cn^
+@@||mixpanel.com/public/$subdocument,domain=iframely.net
 @@||mixpanel.com/track/?data=$xmlhttprequest,domain=eloan.co.il
 @@||mjrpay.jd.com^
 @@||mlb.com/shared/scripts/bam.tracking.js
@@ -6412,6 +6413,7 @@
 @@||static.parsely.com/p.js$domain=nfl.com
 @@||static.parsely.com^$script,domain=dailystar.co.uk|express.co.uk|nydailynews.com
 @@||static.pddpic.com^
+@@||static.pinpoll.com^$subdocument,domain=iframely.net
 @@||static.qiyi.com^
 @@||static.res.qq.com^
 @@||static.rpxnow.com/js/lib/rpx.js$domain=colbertnation.com|thedailyshow.com
@@ -6727,6 +6729,7 @@
 @@||toolfk.com/tools/js/share/js/jquery.share.min.js
 @@||toolfk.com^$generichide
 @@||tools.finra.org/monitoring/adrum_init.js$domain=tools.finra.org
+@@||tools.pinpoll.com^$script,subdocument,domain=iframely.net
 @@||toonily.com^
 @@||toonily.me^
 @@||top.17173.com^
