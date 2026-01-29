@@ -8,11 +8,11 @@
 | :--- | :--- | :--- |
 | Clean Bing & DuckDuckGo.txt | 13 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/custom-rules/Clean%20Bing%20%26%20DuckDuckGo.txt) |
 | custom_whitelist.txt | 1 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/custom-rules/custom_whitelist.txt) |
-| whitelist.txt | 7622 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/whitelist.txt) |
-| adguard_rules.txt | 206598 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/adguard_rules.txt) |
+| whitelist.txt | 6541 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/whitelist.txt) |
+| adguard_rules.txt | 188358 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/adguard_rules.txt) |
 | hosts_rules.txt | 6073 | [点击下载](https://raw.githubusercontent.com/Wuming155/China-AdGuard-Rules/main/dist/hosts_rules.txt) |
 
-⏰ 最后更新: 2026-01-28 09:14:28
+⏰ 最后更新: 2026-01-29 09:24:22
 
 ## 二、注意事项
 1.custom_whitelist.txt包含在whitelist.txt中，用于自定义放行的域名。
